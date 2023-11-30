@@ -1,6 +1,9 @@
+//adding items to list
+
 const itemForm = document.getElementById('item-form');
 const itemInput = document.getElementById('item-input');
 const itemList = document.getElementById('item-list');
+const clearBtn = document.getElementById('clear');
 
 
 function addItem(e){
@@ -43,4 +46,23 @@ function createIcon(classes){
 
 //Event listeners
 
+
+//deleting items from list
+
+function removeItem (e){
+    if (e.target.parentElement.classList.contains('remove-item')){
+        e.target.parentElement.parentElement.remove()
+    }
+}
+
+//clear all btn
+
+function ClearItems(e){
+while (itemList.firstChild){
+    itemList.removeChild(itemList.firstChild)
+}
+}
+
 itemForm.addEventListener('submit',addItem)
+itemList.addEventListener('click',removeItem)
+clearBtn.addEventListener('click',ClearItems)
