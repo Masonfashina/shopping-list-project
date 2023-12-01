@@ -55,7 +55,7 @@ function removeItem(e) {
     if (confirm("Are you sure?")) {
       e.target.parentElement.parentElement.remove();
 
-      checkUI()
+      checkUI();
     }
   }
 }
@@ -65,9 +65,24 @@ function removeItem(e) {
 function ClearItems(e) {
   while (itemList.firstChild) {
     itemList.removeChild(itemList.firstChild);
-
+  }
+  checkUI();
 }
-checkUI()
+
+//filter function
+function filterItems(e) {
+  const items = itemList.querySelectorAll("li");
+  const text = e.target.value.toLowerCase();
+
+  items.forEach((item) => {
+    const itemName = item.firstChild.textContent.toLocaleLowerCase();
+
+    if (itemName.indexOf(text) != -1){
+      item.style.display = 'flex'
+    }else{
+      item.style.display = 'none'
+    }
+  });
 }
 
 //hiding filter and clear elements to make app dynamic
@@ -88,5 +103,6 @@ function checkUI() {
 itemForm.addEventListener("submit", addItem);
 itemList.addEventListener("click", removeItem);
 clearBtn.addEventListener("click", ClearItems);
+itemFilter.addEventListener("input", filterItems);
 
 checkUI();
