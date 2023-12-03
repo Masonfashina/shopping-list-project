@@ -6,6 +6,11 @@ const itemList = document.getElementById("item-list");
 const clearBtn = document.getElementById("clear");
 const itemFilter = document.getElementById("filter");
 
+function displayItems() {
+  const itemsFromStorage = getItemsFromStorage();
+  itemsFromStorage.forEach((item) => addItemToDom(item));
+  checkUI()
+}
 function onAddItemSubmit(e) {
   e.preventDefault();
 
@@ -19,12 +24,10 @@ function onAddItemSubmit(e) {
   }
 
   //Create item DOM element
-  addItemToDom(newItem)
-
+  addItemToDom(newItem);
 
   //Add item to local storage
-  addItemToStorage(newItem)
-
+  addItemToStorage(newItem);
 
   checkUI();
   itemInput.value = "";
@@ -44,23 +47,6 @@ function addItemToDom(item) {
   itemList.appendChild(li);
 }
 
-function addItemToStorage(item) {
-  let itemsFromStorage;
-
-  if (localStorage.getItem(items) === null) {
-    itemsFromStorage = [];
-  } else {
-    itemsFromStorage = JSON.parse(localStorage.getItem("items"));
-  }
-
-  //add new item to array
-  itemsFromStorage.push(item);
-
-  //convert to JSON string and set to local storage
-
-  localStorage.setItem("items", JSON.stringify(itemsFromStorage));
-}
-
 function createButton(classes) {
   const button = document.createElement("button");
   button.className = classes;
@@ -74,11 +60,35 @@ function createIcon(classes) {
   icon.className = classes;
   return icon;
 }
+//add items
+function addItemToStorage(item) {
+  const itemsFromStorage = getItemsFromStorage();
 
-//Event listeners
+  //add new item to array
+  itemsFromStorage.push(item);
+
+  //convert to JSON string and set to local storage
+
+  localStorage.setItem("items", JSON.stringify(itemsFromStorage));
+}
+
+// get items from storage
+
+function getItemsFromStorage() {
+  let itemsFromStorage;
+
+  if (localStorage.getItem('items') === null) {
+    itemsFromStorage = [];
+  } else {
+    itemsFromStorage = JSON.parse(localStorage.getItem("items"));
+  }
+
+  return itemsFromStorage;
+}
+
+
 
 //deleting items from list
-
 function removeItem(e) {
   if (e.target.parentElement.classList.contains("remove-item")) {
     if (confirm("Are you sure?")) {
@@ -127,11 +137,16 @@ function checkUI() {
   }
 }
 
-//Event Listeners
+function init(){
+  //Event Listeners
 
 itemForm.addEventListener("submit", onAddItemSubmit);
-itemList.addEventListener("click", removeItem);
+itemList.addEventListener("click", onClickItem);
 clearBtn.addEventListener("click", ClearItems);
 itemFilter.addEventListener("input", filterItems);
+document.addEventListener("DOMContentLoaded", displayItems);
 
 checkUI();
+}
+
+init();
